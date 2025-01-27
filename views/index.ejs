@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cu Confession</title>
+
+    <!-- poppins font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/output.css">
+</head>
+
+<body class="bg-black text-white flex items-center justify-center gap-5 flex-col">
+    <!-- this part is for the navigation bar -->
+    <div class="h-20 bg-[#262629] flex items-center justify-between flex-row px-6 w-full">
+        <div class="font-semibold tracking-tighter text-2xl">CU Confession</div>
+        <button>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                data-slot="icon" class="h-5 w-5">
+                <path
+                    d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z">
+                </path>
+            </svg>
+        </button>
+    </div>
+    <!-- create new post button -->
+    <button type="button" id="CreatePost"
+        class="bg-white text-black w-[95%] h-10 rounded-lg text-sm hover:bg-gray-300">Create New Post</button>
+
+    <!-- creating post div when button is clicked -->
+    <div id="CreatePostDiv"
+        class="inset-0 flex flex-shrink-0 justify-center items-center bg-black bg-opacity-30 fixed">
+        <div
+            class="h-auto w-[40%] border-2 border-[#262629] rounded-lg p-7 bg-black space-y-2 flex justify-between flex-col relative gap-2">
+            <div class="space-y-1">
+                <h1 class="h-auto text-xl font-semibold tracking-tight">Create New Post</h1>
+                <h2 class="h-auto text-[15px] text-gray-400">Choose the type of post you want to create</h2>
+            </div>
+            <form id="postdivform" class="flex-1 space-y-4" action="/postdiv" method="post">
+                <div class="bg-[#262629] p-1 flex flex-row justify-between w-full rounded-md text-sm h-10">
+                    <button class="flex-1" id="PostConfession" onclick="CreatePostHandle('PostConfession')"
+                        type="button">Confession</button>
+                    <button class="flex-1" id="PostPoll" onclick="CreatePostHandle('PostPoll')"
+                        type="button">Poll</button>
+                    <button class="flex-1" id="PostMeme" onclick="CreatePostHandle('PostMeme')"
+                        type="button">Meme</button>
+                </div>
+                <div id="PostTextArea" class="">
+
+                </div>
+                <button type="submit"
+                    class="bg-white outline-none text-black h-12 rounded-md w-[35%] tracking-tight font-medium">Post
+                    Confession</button>
+            </form>
+
+            <!-- for closing the create post div -->
+            <button type="button" class="absolute right-2 top-0 h-auto" id="createpostclose">
+                <svg xmlns="http://www.w3.org/2000/svg" height="14" width="14"
+                    viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#ffffff"
+                        d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+    <!-- div for the main part -->
+    <div class="h-auto w-[95%]">
+        <div class="flex items-center justify-center w-full h-9 bg-[#262629] rounded-lg p-1 text-[15px]">
+            <button id="All" class="w-[25%] h-full" onclick="handleclick('All')">All</button>
+            <button id="Confession" class="w-[25%] h-full" onclick="handleclick('Confession')">Confession</button>
+            <button id="Polls" class="w-[25%] h-full" onclick="handleclick('Polls')">Polls</button>
+            <button id="Meme" class="w-[25%] h-full" onclick="handleclick('Meme')">Meme</button>
+        </div>
+    </div>
+
+        
+    <!-- this part is for the typeofpost -->
+    
+    
+   <div id="PostType" class="w-full h-full flex items-center justify-center flex-col gap-4">
+    <!-- for the the confession div -->
+    <div class="h-auto w-[95%] rounded-lg bg-[#262629] flex justify-center items-center flex-col">
+        <!-- for upper headers and count -->
+        <div class="py-1">
+            <div class="flex justify-center items-center font-semibold text-lg my-2">Confession</div>
+            <div class="flex w-auto items-center justify-center flex-row gap-6 my-2">
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
+                    </svg>
+                </button>
+                <div>0</div>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- for the main text area -->
+        <div class="w-[99.5%] bg-black p-5">I've never actually read a full textbook in my life.
+        </div>
+        <!-- for the comment area -->
+        <div class="px-7 h-12 w-full flex items-center justify-end text-sm flex-row gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z">
+                </path>
+            </svg>
+            <div>15</div>
+            <div>Comments</div>
+        </div>
+    </div>
+
+    <!-- for polling div -->
+    <div data-type="Polling" class="h-auto w-[95%] rounded-lg bg-[#262629] flex justify-center items-center flex-col">
+        <!-- for upper headers and count -->
+        <div class="py-1">
+            <div class="flex justify-center items-center font-semibold text-lg my-2">Polls</div>
+            <div class="flex w-auto items-center justify-center flex-row gap-6 my-2">
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
+                    </svg>
+                </button>
+                <div>0</div>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- for the main text area -->
+        <div class="w-[99.5%] bg-black p-5 space-y-1">
+            <div class="p-1">I've never actually read a full textbook in my life.</div>
+            <div class="w-full flex flex-col items-start  gap-2">
+                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 1</button>
+                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 2</button>
+                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 3</button>
+                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 4</button>
+            </div>
+        </div>
+        <!-- for the comment area -->
+        <div class="px-7 h-12 w-full flex items-center justify-end text-sm flex-row gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z">
+                </path>
+            </svg>
+            <div>15</div>
+            <div>Comments</div>
+        </div>
+    </div>
+
+    <!-- for meme div -->
+    <div class="h-auto w-[95%] rounded-lg bg-[#262629] flex justify-center items-center flex-col">
+        <!-- for upper header count -->
+        <div class="py-1">
+            <div class="flex justify-center items-center font-semibold text-lg my-2">Meme</div>
+            <div class="flex w-auto items-center justify-center flex-row gap-6 my-2">
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
+                    </svg>
+                </button>
+                <div>0</div>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- meme upload area -->
+        <div class="bg-black py-3 w-full h-auto flex items-center justify-center flex-col gap-2">
+            <img class="fill w-[50%] h-auto rounded-lg" src="/images/image.png" alt="" srcset="">
+            <div>Caption for the img</div>
+        </div>
+        <!-- for the comment area -->
+        <div class="px-7 h-12 w-full flex items-center justify-end text-sm flex-row gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z">
+                </path>
+            </svg>
+            <div>15</div>
+            <div>Comments</div>
+        </div>
+    </div>
+   </div>
+</body>
+<script src="./js/script.js"></script>
+
+</html>
