@@ -1,5 +1,10 @@
 let lastClickedButton = null;
+let offset=0
+const limit=5
+let loading=false;
+
 function handleclick(buttonText) {
+  offset=0;
   const buttonid = document.getElementById(buttonText.trim());
   const postdiv = document.getElementById("PostType");
   if (lastClickedButton && lastClickedButton !== buttonid) {
@@ -139,22 +144,39 @@ async function sendrequest(type, data) {
 }
 
 // function to send fetch request for getting post type
+
 async function postrequest(type) {
-  const response = await fetch("/postrequest", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      type: type,
-    }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    console.log("Some error occured");
-    return;
+  if (loading) return;
+  loading = true;
+
+  try {
+    const response = await fetch("/postrequest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: type,
+        offset,
+        limit,
+      }),
+    });
+    const data = await response.json();
+    console.log("Received data:", data); // Log the received data
+
+    if (!response.ok || !Array.isArray(data)) {
+      console.log("No more posts to load or some error occurred");
+      loading = false;
+      return;
+    }
+
+    data.forEach(item => {
+      appendData(item.type, item);
+    });
+    offset += limit;
+  } catch (error) {
+    console.error("Fetch error:", error);
+  } finally {
+    loading = false;
   }
-  data.forEach(item=>{
-    appendData(item.type,item)
-  })
 }
 // for appending the type of data
 async function appendData(type,item){
@@ -248,10 +270,20 @@ async function appendData(type,item){
       break;
 
     case "PostMeme":
-      console.log(item);
+      div.innerHTML=`<div class="text-white">Will be available soon</div>`
       break;
   }
 }
+
+window.addEventListener("scroll",() => {
+
+  setTimeout(async()=>{
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && !loading) 
+      {
+        await postrequest(lastClickedButton ? lastClickedButton.id : "All")
+      }
+  },500)
+});
 
 // for default click
 document.getElementById("PostConfession").click();

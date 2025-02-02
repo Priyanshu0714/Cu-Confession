@@ -101,37 +101,48 @@ app.post('/postdiv',(req,res)=>{
 })
 
 // for postrequest to send the type of post data
-app.post("/postrequest",async(req,res)=>{
-  const posttype=req.body.type
+app.post("/postrequest", async (req, res) => {
+  const posttype = req.body.type;
+  const offset = parseInt(req.body.offset) || 0; // Default offset to 0 if not provided
+  const limit = parseInt(req.body.limit) || 5;  // Default limit to 5 if not provided
+
   try {
-    if(posttype=="All"){
-      console.log("will be build soon")
+    let posts = [];
+
+    if (posttype === "All") {
+      const confessions = await confession.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
+      const polls = await poll.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
+
+      // Combine the confessions and polls and sort them based on timeStamp
+      posts = [...confessions, ...polls].sort((a, b) => b.timeStamp - a.timeStamp);
+    } 
+    else if (posttype === "Confession") {
+      posts = await confession.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
+    } 
+    else if (posttype === "Polls") {
+      posts = await poll.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
+    } 
+    else if (posttype === "Meme") {
+      return res.status(200).json({ message: "Meme feature will be built soon!" });
+    } 
+    else {
+      return res.status(400).json({ error: "Invalid post type!" });
     }
-    else if(posttype=="Confession"){
-      const post=await confession.find()
-      if(post.length>0){
-        return res.status(200).json(post)
-      }
-      else{
-        return res.status(100).json({message:"No post found!"})
-      }
-    }
-    else if(posttype=="Polls"){
-      const post=await poll.find()
-      if(post.length>0){
-        return res.status(200).json(post)
-      }
-      else{
-        return res.status(100).json({message:"No post found!"})
-      }
-    }
-    else if(posttype=="Meme"){
-      return res.status(100).json({ message: "Meme feature will be built soon!" });
+
+    // Send response only once
+    if (posts.length > 0) {
+      return res.status(200).json(posts);
+    } else {
+      return res.status(200).json({ message: "No posts found!" });
     }
   } catch (error) {
-    return res.status(400).json({ error: "Invalid post type!" });
+    console.error("Error fetching posts:", error);
+    if (!res.headersSent) {
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
   }
-})
+});
+
 
 app.listen(port,()=>{
     console.log(`Listening on port ${port}`)
