@@ -2,6 +2,7 @@ const express=require('express')
 const path=require('path')
 const app=express()
 const mongoose=require('mongoose')
+const multer=require('multer')
 const { timeStamp } = require('console')
 const { type } = require('os')
 
@@ -13,6 +14,15 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// multer storage 
+const storage=multer.diskStorage({
+  destination:"uploads/",
+  filename:(req,file,cb)=>{
+    cb(null,Date.now()+"-"+file.originalname);
+  },
+})
+const upload =multer({storage})
 
 mongoose
   .connect(
@@ -98,6 +108,27 @@ app.post('/postdiv',(req,res)=>{
   }
   currentpost++;
   res.redirect("/")
+})
+
+// schemas and model for image
+const imageschema=new mongoose.Schema({
+  type:{type:String,default:"Postimage"},
+  imageurl:String,
+  caption:String,
+  timeStamp:{type:Date,default:Date.now}
+})
+const image=mongoose.model("image",imageschema)
+// for image div
+app.post("/imageupload",upload.single("image"),(req,res)=>{
+  if(!req.file){
+    return res.status(400).json({message:"No file uploaded"})
+  }
+  const Image=new image({
+    imageurl:req.file.path,
+    caption:req.body.imagecaption
+  })
+  Image.save()
+  res.json({success:true,message:"File uploaded",fileurl:`/uploads/${req.file.filename}`})
 })
 
 // for postrequest to send the type of post data

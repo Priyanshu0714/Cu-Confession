@@ -69,15 +69,15 @@ function CreatePostHandle(type) {
   switch (type) {
     case "PostConfession":
       postdiv.innerHTML =
-        '<textarea id="confessiontext" class="w-full h-28 bg-black rounded-md p-2 text-sm text-white outline-none border-2 border-[#262629]" name="message" required></textarea>';
+        '<textarea id="confessiontext" class="w-full h-28 bg-black rounded-md p-2 text-sm text-white outline-none border-2 border-[#262629]" name="message" placeholder="Write your Confession 💕" required></textarea>';
       break;
     case "PostPoll":
       postdiv.innerHTML =
-        '<div class="flex flex-col gap-3"><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="pollquestion" id="pollquestion" placeholder="Poll Question" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option1" id="option1" placeholder="Option 1" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option2" id="option2" placeholder="Option 2" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option3" id="option3" placeholder="Option 3" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option4" id="option4" placeholder="Option 4" required></div>';
+        '<div class="flex flex-col gap-3"><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="pollquestion" id="pollquestion" placeholder="Poll Question 🧐" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option1" id="option1" placeholder="Option 1" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option2" id="option2" placeholder="Option 2" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option3" id="option3" placeholder="Option 3" required><input class="rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="option4" id="option4" placeholder="Option 4" required></div>';
       break;
     case "PostMeme":
       postdiv.innerHTML =
-        '<div class="space-y-3"><input type="file" id="memeimg" name="memeimg"><input class="w-full rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="memecaption" id="memecaption"></div>';
+        '<div class="space-y-3"><input type="file" id="memeimg" name="image" required><input class="w-full rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="memecaption" id="memecaption" placeholder="Caption 😎" required></div>';
       break;
     default:
       console.log("Some error occurred!!");
@@ -119,6 +119,37 @@ async function handleFormSubmit(event) {
       });
       await sendrequest("PostPoll", pollData);
     }
+  }
+  else if(CreatepostLastClick.id==='PostMeme'){
+    const imageinput=document.getElementById("memeimg").files[0]
+    const imagecaption=document.getElementById("memecaption").value
+
+    if(!imageinput){
+      return;
+    }
+    imageupload("Memecaption",{image:imageinput,imagecaption});
+  }
+  
+}
+// fetch request to send image files
+async function imageupload(type, data) {
+  const formData = new FormData();
+  formData.append("type", type);
+
+  for (const key in data) {
+      formData.append(key, data[key]);
+  }
+
+  const response = await fetch("/imageupload", {
+      method: "POST",
+      body: formData,
+  });
+
+  if (response.ok) {
+      document.getElementById("memeimg").value="";
+      document.getElementById("memecaption").value=""
+  } else {
+      console.log("Some error occurred");
   }
 }
 
