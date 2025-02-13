@@ -89,7 +89,7 @@ const poll =mongoose.model("poll",pollSchema)
 app.post('/postdiv',(req,res)=>{
   // console.log(req.body)
   const {type ,...rest}=req.body
-  console.log(rest)
+  // console.log(rest)
   switch(type){
     case "PostConfession":
       const {message}=rest;
@@ -100,7 +100,7 @@ app.post('/postdiv',(req,res)=>{
           message:message,
         })
         Confession.save();
-        return res.status(200);
+        return res.status(200).json({success:true});
       } catch (error) {
         return res.status(400).send(error)
       }

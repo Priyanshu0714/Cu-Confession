@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cu Confession</title>
-
+    <link rel="icon" href="/images/favicon.svg">
     <!-- poppins font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
 <body class="bg-black text-white flex items-center justify-center gap-5 flex-col">
     <!-- this part is for the navigation bar -->
     <div class="h-20 bg-[#262629] flex items-center justify-between flex-row px-6 w-full">
-        <div class="font-semibold tracking-tighter text-2xl">CU Confession[BETA]</div>
+        <div class="font-semibold tracking-tighter text-2xl inline-flex">CU Confession[BETA]</div>
         <button class="invisible">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
                 data-slot="icon" class="h-5 w-5">
@@ -37,7 +37,7 @@
     <div id="CreatePostDiv"
         class="inset-0 hidden flex-shrink-0 justify-center items-center bg-black bg-opacity-30 fixed">
         <div
-            class="h-auto w-[40%] border-2 border-[#262629] rounded-lg p-7 bg-black space-y-2 flex justify-between flex-col relative gap-2">
+            class="h-auto w-[40%] border-2 border-[#262629] rounded-lg p-7 bg-black space-y-2 flex justify-between flex-col relative gap-2 max-lg:w-[60%] max-md:w-[70%] max-sm:w-[95%]">
             <div class="space-y-1">
                 <h1 class="h-auto text-xl font-semibold tracking-tight">Create New Post</h1>
                 <h2 class="h-auto text-[15px] text-gray-400">Choose the type of post you want to create</h2>
@@ -54,8 +54,8 @@
                 <div id="PostTextArea" class="">
 
                 </div>
-                <button type="submit"
-                    class="bg-white outline-none text-black h-12 rounded-md w-[35%] tracking-tight font-medium hover:bg-gray-300 focus:bg-gray-300">Post
+                <button id="postconfessionsubmitbutton" type="submit"
+                    class="bg-white outline-none text-black h-12 rounded-md w-[35%] tracking-tight font-medium hover:bg-gray-300 focus:bg-gray-300 max-sm:w-[70%]">Post
                     Confession</button>
             </form>
 

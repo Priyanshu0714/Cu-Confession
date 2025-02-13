@@ -90,10 +90,13 @@ function CreatePostHandle(type) {
 
 async function handleFormSubmit(event) {
   event.preventDefault();
-
+  document.getElementById("CreatePostDiv").classList.replace("flex","hidden")
+  const div=document.getElementById("PostType")
+  // location.reload()
   if (CreatepostLastClick.id === "PostConfession") {
     const messageInput = document.getElementById("confessiontext");
     if (messageInput) {
+      // before sending to backend making sure to append it to the front end
       const message = messageInput.value.trim();
       document.getElementById("confessiontext").value = "";
       await sendrequest("PostConfession", message);
@@ -126,9 +129,8 @@ async function handleFormSubmit(event) {
     if(!imageinput){
       return;
     }
-    imageupload("Memecaption",{image:imageinput,imagecaption});
+    await imageupload("Memecaption",{image:imageinput,imagecaption});
   }
-  
 }
 // fetch request to send image files
 async function imageupload(type, data) {
@@ -163,15 +165,17 @@ async function sendrequest(type, data) {
       typeof data === "string" ? { type, message: data } : { type, ...data }
     ),
   });
-  if (response.ok) {
+  const dataresponse=await response.json()
+  if (dataresponse.ok) {
     console.log("successfully sent the data");
     return
   } else {
     console.log("some error occured");
     return
-  }
-  
+  }  
 }
+
+
 
 // function to send fetch request for getting post type
 
@@ -467,3 +471,9 @@ function calculatepercentage(option1, option2, option3, option4, id) {
   });
 }
 
+// for reload after the post has been added
+document.getElementById("postconfessionsubmitbutton").addEventListener("click",()=>{
+  setTimeout(()=>{
+    document.getElementById("All").click()},500
+  )
+})
