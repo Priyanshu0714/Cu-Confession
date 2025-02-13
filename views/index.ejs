@@ -19,8 +19,8 @@
 <body class="bg-black text-white flex items-center justify-center gap-5 flex-col">
     <!-- this part is for the navigation bar -->
     <div class="h-20 bg-[#262629] flex items-center justify-between flex-row px-6 w-full">
-        <div class="font-semibold tracking-tighter text-2xl">CU Confession</div>
-        <button>
+        <div class="font-semibold tracking-tighter text-2xl">CU Confession[BETA]</div>
+        <button class="invisible">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
                 data-slot="icon" class="h-5 w-5">
                 <path
@@ -35,7 +35,7 @@
 
     <!-- creating post div when button is clicked -->
     <div id="CreatePostDiv"
-        class="inset-0 flex flex-shrink-0 justify-center items-center bg-black bg-opacity-30 fixed">
+        class="inset-0 hidden flex-shrink-0 justify-center items-center bg-black bg-opacity-30 fixed">
         <div
             class="h-auto w-[40%] border-2 border-[#262629] rounded-lg p-7 bg-black space-y-2 flex justify-between flex-col relative gap-2">
             <div class="space-y-1">
@@ -73,10 +73,10 @@
     <!-- div for the main part -->
     <div class="h-auto w-[95%]">
         <div class="flex items-center justify-center w-full h-9 bg-[#262629] rounded-lg p-1 text-[15px]">
-            <button id="All" class="w-[25%] h-full" onclick="handleclick('All')">All</button>
-            <button id="Confession" class="w-[25%] h-full" onclick="handleclick('Confession')">Confession</button>
-            <button id="Polls" class="w-[25%] h-full" onclick="handleclick('Polls')">Polls</button>
-            <button id="Meme" class="w-[25%] h-full" onclick="handleclick('Meme')">Meme</button>
+            <button id="All" class="flex-1 h-full max-md:flex-auto" onclick="handleclick('All')">All</button>
+            <button id="Confession" class="flex-1 h-full max-md:flex-auto" onclick="handleclick('Confession')">Confession</button>
+            <button id="Polls" class="flex-1 h-full max-md:flex-auto" onclick="handleclick('Polls')">Polls</button>
+            <button id="Meme" class="flex-1 h-full max-md:flex-auto" onclick="handleclick('Meme')">Meme</button>
         </div>
     </div>
 
@@ -151,7 +151,10 @@
             <div class="w-[99.5%] bg-black p-5 space-y-1">
                 <div class="p-1">I've never actually read a full textbook in my life.</div>
                 <div class="w-full flex flex-col items-start  gap-2">
-                    <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 1</button>
+                    <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex relative">
+                        <div class="z-10">option1</div>
+                        <span class="absolute w-[50%] bg-red-500 flex rounded-sm justify-end">60%</span>
+                    </button>
                     <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 2</button>
                     <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 3</button>
                     <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex">option 4</button>
@@ -211,7 +214,7 @@
         </div>
     </div>
    </div>
+   <script src="./js/script.js"></script>
 </body>
-<script src="./js/script.js"></script>
 
 </html>

@@ -3,15 +3,33 @@ const path=require('path')
 const app=express()
 const mongoose=require('mongoose')
 const multer=require('multer')
-const { timeStamp } = require('console')
-const { type } = require('os')
+const rateLimit = require('express-rate-limit');
+
+// const likeupdate=require("./updatelike.js")
+
+mongoose
+  .connect(
+    "mongodb+srv://priyanshu:Ppriyanshu%401407@priyanshucluster.kzr7x.mongodb.net/CuConfession?retryWrites=true&w=majority&appName=PriyanshuCluster",
+    { serverSelectionTimeoutMS: 20000 }
+  )
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 const port=3000
 let currentpost=1
-
+// for ddos protection 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests, please try again later.',
+});
+app.use(limiter);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "uploads")));
+// for like updating in files.
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -24,19 +42,16 @@ const storage=multer.diskStorage({
 })
 const upload =multer({storage})
 
-mongoose
-  .connect(
-    "mongodb+srv://priyanshu:Ppriyanshu%401407@priyanshucluster.kzr7x.mongodb.net/CuConfession?retryWrites=true&w=majority&appName=PriyanshuCluster",
-    { serverSelectionTimeoutMS: 20000 }
-  )
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+
 
 app.get("/",(req,res)=>{
     res.render('index')
 })
 
-
+app.get("/uploads/:filename",(req,res)=>{
+  const imagefilepath=path.join(__dirname,"uploads",req.params.filename)
+  res.sendFile(imagefilepath)
+})
 
 // schema and model for confession
 const confessionScheme=new mongoose.Schema({
@@ -58,6 +73,10 @@ const pollSchema=new mongoose.Schema({
   option2:String,
   option3:String,
   option4:String,
+  option1choice:{type:Number,default:0},
+  option2choice:{type:Number,default:0},
+  option3choice:{type:Number,default:0},
+  option4choice:{type:Number,default:0},
   timeStamp:{type:Date,default:Date.now}
 })
 const poll =mongoose.model("poll",pollSchema)
@@ -115,6 +134,7 @@ const imageschema=new mongoose.Schema({
   type:{type:String,default:"Postimage"},
   imageurl:String,
   caption:String,
+  likes:{type:Number,default:0},
   timeStamp:{type:Date,default:Date.now}
 })
 const image=mongoose.model("image",imageschema)
@@ -127,8 +147,8 @@ app.post("/imageupload",upload.single("image"),(req,res)=>{
     imageurl:req.file.path,
     caption:req.body.imagecaption
   })
-  Image.save()
-  res.json({success:true,message:"File uploaded",fileurl:`/uploads/${req.file.filename}`})
+  Image.save();
+  res.json({success:true,message:"File uploaded",fileurl:`/uploads/${req.file.filename}`});
 })
 
 // for postrequest to send the type of post data
@@ -143,9 +163,10 @@ app.post("/postrequest", async (req, res) => {
     if (posttype === "All") {
       const confessions = await confession.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
       const polls = await poll.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
+      const pictures=await image.find().sort({timeStamp:-1}).skip(offset).limit(limit);
 
       // Combine the confessions and polls and sort them based on timeStamp
-      posts = [...confessions, ...polls].sort((a, b) => b.timeStamp - a.timeStamp);
+      posts = [...confessions, ...polls,...pictures].sort((a,b) =>b.timeStamp - a.timeStamp);
     } 
     else if (posttype === "Confession") {
       posts = await confession.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
@@ -154,7 +175,7 @@ app.post("/postrequest", async (req, res) => {
       posts = await poll.find().sort({ timeStamp: -1 }).skip(offset).limit(limit);
     } 
     else if (posttype === "Meme") {
-      return res.status(200).json({ message: "Meme feature will be built soon!" });
+      posts=await image.find().sort({timeStamp:-1}).skip(offset).limit(limit);
     } 
     else {
       return res.status(400).json({ error: "Invalid post type!" });
@@ -174,6 +195,70 @@ app.post("/postrequest", async (req, res) => {
   }
 });
 
+// for likes updating
+// app.use("/updatelikes",likeupdate)
+app.post("/updatelikes",(req,res)=>{
+    const id=req.body.id;
+    const type=req.body.type
+    // console.log(type)
+    update(id,type)
+    return res.status(200).json({success:true})
+})
+async function update(id,type){
+    if(type=="PostConfession"){
+        const update= await confession.findByIdAndUpdate(id,
+            {$inc:{likes:1}},
+            {new:true},
+        );
+    }
+    else if(type=="PostPoll"){
+      const update= await poll.findByIdAndUpdate(id,
+          {$inc:{likes:1}},
+          {new:true},
+      );
+  }
+    else if(type=="Postimage"){
+      const update= await image.findByIdAndUpdate(id,
+          {$inc:{likes:1}},
+          {new:true},
+      );
+    }
+}
+
+// this part is for calculateEngagement
+app.post("/calculateEngagement",async (req,res)=>{
+  try {
+    if(req.body.type==="a"){
+      const update=await poll.findByIdAndUpdate(req.body.id,
+        {$inc:{option1choice:1}},
+        {new:true}
+      )
+    }
+    else if(req.body.type==="b"){
+      const update=await poll.findByIdAndUpdate(req.body.id,
+        {$inc:{option2choice:1}},
+        {new:true}
+      )
+    }
+    else if(req.body.type==="c"){
+      const update=await poll.findByIdAndUpdate(req.body.id,
+        {$inc:{option3choice:1}},
+        {new:true}
+      )
+    }
+    else if(req.body.type==="d"){
+      const update=await poll.findByIdAndUpdate(req.body.id,
+        {$inc:{option4choice:1}},
+        {new:true}
+      )
+    } 
+    const data=await poll.findById(req.body.id)
+    return res.status(200).json({data:data})
+    
+  } catch (error) {
+    res.status(400).json({success:false,message:"unable to fetch data"})
+  }
+})
 
 app.listen(port,()=>{
     console.log(`Listening on port ${port}`)

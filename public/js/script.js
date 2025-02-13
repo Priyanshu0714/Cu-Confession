@@ -17,20 +17,20 @@ function handleclick(buttonText) {
 
   switch (buttonText) {
     case "All":
-      console.log("all");
+      // console.log("all");
       postrequest(buttonText);
       break;
     case "Confession":
-      console.log("confession");
+      // console.log("confession");
       postrequest(buttonText);
       break;
     case "Polls":
-      console.log("polls");
+      // console.log("polls");
       postrequest(buttonText);
       break;
     case "Meme":
       postrequest(buttonText);
-      console.log("meme");
+      // console.log("meme");
       break;
   }
 }
@@ -113,7 +113,6 @@ async function handleFormSubmit(event) {
     });
 
     if (allFieldsExist) {
-      console.log(pollData);
       pollfields.forEach((id) => {
         document.getElementById(id).value = "";
       });
@@ -191,7 +190,6 @@ async function postrequest(type) {
       }),
     });
     const data = await response.json();
-    console.log("Received data:", data); // Log the received data
 
     if (!response.ok || !Array.isArray(data)) {
       console.log("No more posts to load or some error occurred");
@@ -209,6 +207,7 @@ async function postrequest(type) {
     loading = false;
   }
 }
+const idcheck=[];
 // for appending the type of data
 async function appendData(type,item){
   const div=document.getElementById("PostType")
@@ -219,14 +218,14 @@ async function appendData(type,item){
         <div class="py-1">
             <div class="flex justify-center items-center font-semibold text-lg my-2">Confession</div>
             <div class="flex w-auto items-center justify-center flex-row gap-6 my-2">
-                <button>
+                <button class="likebutton" onclick="getcontainer('${item._id}','${type}')">
                     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
                         viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
                         <path fill="#ffffff"
                             d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
                     </svg>
                 </button>
-                <div>${item.likes}</div>
+                <div id="${item._id}">${item.likes}</div>
                 <button>
                     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
                         viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
@@ -247,26 +246,26 @@ async function appendData(type,item){
                     d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z">
                 </path>
             </svg>
-            <div>15</div>
-            <div>Comments</div>
+            <div></div>
+            <div>Comments(comming soon)</div>
         </div>
     </div>`;
       break;
 
     case "PostPoll":
-      div.innerHTML+=`<div data-type="Polling" class="h-auto w-[95%] rounded-lg bg-[#262629] flex justify-center items-center flex-col">
+      div.innerHTML+=`<div class="h-auto w-[95%] rounded-lg bg-[#262629] flex justify-center items-center flex-col">
         <!-- for upper headers and count -->
         <div class="py-1">
             <div class="flex justify-center items-center font-semibold text-lg my-2">Polls</div>
             <div class="flex w-auto items-center justify-center flex-row gap-6 my-2">
-                <button>
+                <button class="likebutton" onclick="getcontainer('${item._id}','${type}')">
                     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
                         viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
                         <path fill="#ffffff"
                             d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
                     </svg>
                 </button>
-                <div>${item.likes}</div>
+                <div id="${item._id}">${item.likes}</div>
                 <button>
                     <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
                         viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
@@ -279,11 +278,11 @@ async function appendData(type,item){
         <!-- for the main text area -->
         <div class="w-[99.5%] bg-black p-5 space-y-1">
             <div class="p-1">${item.question}</div>
-            <div class="w-full flex flex-col items-start  gap-2">
-                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex focus:border-white">${item.option1}</button>
-                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex focus:border-white">${item.option2}</button>
-                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex focus:border-white">${item.option3}</button>
-                <button class="p-2 rounded-lg border-2 border-[#262629] w-full flex focus:border-white">${item.option4}</button>
+            <div class="w-full flex flex-col items-start gap-2">
+                <button class="option-button a${item._id} p-2 rounded-lg border-2 border-[#262629] w-full flex " onclick=getpollsbutton(this)>${item.option1}</button>
+                <button class="option-button b${item._id} p-2 rounded-lg border-2 border-[#262629] w-full flex " onclick=getpollsbutton(this)>${item.option2}</button>
+                <button class="option-button c${item._id} p-2 rounded-lg border-2 border-[#262629] w-full flex " onclick=getpollsbutton(this)>${item.option3}</button>
+                <button class="option-button d${item._id} p-2 rounded-lg border-2 border-[#262629] w-full flex " onclick=getpollsbutton(this)>${item.option4}</button>
             </div>
         </div>
         <!-- for the comment area -->
@@ -294,15 +293,55 @@ async function appendData(type,item){
                     d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z">
                 </path>
             </svg>
-            <div>15</div>
-            <div>Comments</div>
+            <div></div>
+            <div>Comments(comming soon)</div>
         </div>
     </div>`
       break;
 
-    case "PostMeme":
-      div.innerHTML=`<div class="text-white">Will be available soon</div>`
+    case "Postimage":
+      div.innerHTML+=`<div class="h-auto w-[95%] rounded-lg bg-[#262629] flex justify-center items-center flex-col">
+        <!--   for upper header count -->
+        <div class="py-1">
+            <div class="flex justify-center items-center font-semibold text-lg my-2">Meme</div>
+            <div class="flex w-auto items-center justify-center flex-row gap-6 my-2">
+                <button class="likebutton" onclick="getcontainer('${item._id}','${type}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2 160 448c0 17.7 14.3 32 32 32s32-14.3 32-32l0-306.7L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z" />
+                    </svg>
+                </button>
+                <div id="${item._id}">${item.likes}</div>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="10.5"
+                        viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path fill="#ffffff"
+                            d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- meme upload area -->
+        <div class="bg-black py-3 w-full h-auto flex items-center justify-center flex-col gap-2">
+            <img class="fill w-[50%] h-auto rounded-lg max-md:w-[100%]" src="${item.imageurl}"  alt="unable to load the image">
+            <div>${item.caption}</div>
+        </div>
+        <!-- for the comment area -->
+        <div class="px-7 h-12 w-full flex items-center justify-end text-sm flex-row gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 mr-1">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z">
+                </path>
+            </svg>
+            <div></div>
+            <div>Comments(comming soon)</div>
+        </div>
+    </div>`
       break;
+    default:
+      console.log("default is working")
   }
 }
 
@@ -318,3 +357,113 @@ window.addEventListener("scroll",() => {
 
 // for default click
 document.getElementById("PostConfession").click();
+
+async function getcontainer(id,type){ 
+  try {
+    if(!idcheck.includes(id)){
+      idcheck.push(id);
+      let likes=parseInt(document.getElementById(id).innerText)+1;
+      document.getElementById(id).innerText=likes
+      const response=await fetch("/updatelikes",{
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          id,type
+        })
+      })
+      const data=await response.json()
+      if(data.ok){
+        console.log("yes its working")
+      }
+      else{
+        console.log("data is not working")
+      }
+    }
+  } catch (error) {
+    console.log("Some error occured with updating likes")
+  }
+}
+
+async function getpollsbutton(params) {
+  // console.log(params.classList[1])
+  const id=params.classList[1]
+  // console.log(`type of option : ${id.slice(0,1)}`)
+  // console.log(`id : ${id.slice(1)}`)
+
+  const array=['a','b','c','d']
+  array.forEach(a=>{
+    if(document.querySelector(`.${a}${id.slice(1)}`).classList.contains("outline")){
+    document.querySelector(`.${a}${id.slice(1)}`).classList.remove("outline")
+    document.querySelector(`.${a}${id.slice(1)}`).classList.remove("outline-white")
+    }
+  })
+  document.querySelector(`.${id}`).classList.add("outline")
+  document.querySelector(`.${id}`).classList.add("outline-white")
+
+}
+// this function is to find the offset width and tell the number of users choice as percentage
+let isFetching = false;
+
+async function calculateEngagement(params) {
+    try {
+      if (isFetching) return;  // Prevent multiple simultaneous calls
+      isFetching = true;
+      const type=params.slice(0,1);
+      const id=params.slice(1)
+      const response = await fetch("/calculateEngagement", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type, id }),
+      });
+
+      const {data} = await response.json();
+      console.log(data)
+      const option1=data.option1choice
+      const option2=data.option2choice
+      const option3=data.option3choice
+      const option4=data.option4choice
+      // code for maths calculating
+      calculatepercentage(option1,option2,option3,option4,id)
+    } catch (error) {
+        console.error("Error fetching engagement:", error);
+    } finally {
+        isFetching = false;
+    }
+}
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("option-button")) {
+    const classid=event.target.classList[1];
+    calculateEngagement(classid);
+  }
+});
+
+function calculatepercentage(option1, option2, option3, option4, id) {
+  const total = option1 + option2 + option3 + option4;
+  const option1value = (option1 / total) * 100;
+  const option2value = (option2 / total) * 100;
+  const option3value = (option3 / total) * 100;
+  const option4value = (option4 / total) * 100;
+  const percentage = [option1value, option2value, option3value, option4value];
+
+  const arr = ['a', 'b', 'c', 'd'];
+  
+  arr.forEach((item, index) => {
+      const btn = document.querySelector(`.${item}${id}`);
+      if (btn) {
+          btn.classList.add("relative", "overflow-hidden");
+
+          const width = btn.offsetWidth;
+          const currentwidth = (width * percentage[index]) / 100;
+
+          const temp_innertext = btn.innerHTML;
+
+          btn.innerHTML = `
+              <div class="absolute left-0 top-0 h-full bg-[#262629] rounded-sm" style="width: ${currentwidth}px;"></div>
+              <div class="relative z-10 flex justify-start w-full">${temp_innertext} ${percentage[index].toFixed(1)}%</div>
+          `;
+      }
+  });
+}
+
