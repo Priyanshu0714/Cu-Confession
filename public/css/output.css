@@ -599,10 +599,6 @@ video {
   margin-right: 0.25rem;
 }
 
-.block {
-  display: block;
-}
-
 .flex {
   display: flex;
 }
@@ -613,6 +609,10 @@ video {
 
 .hidden {
   display: none;
+}
+
+.aspect-\[16\/9\] {
+  aspect-ratio: 16/9;
 }
 
 .h-10 {
@@ -816,6 +816,11 @@ video {
   --tw-bg-opacity: 0.3;
 }
 
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
 .p-1 {
   padding: 0.25rem;
 }
@@ -855,10 +860,6 @@ video {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .text-2xl {
@@ -953,30 +954,14 @@ video {
 }
 
 @media not all and (min-width: 1024px) {
-  .max-lg\:w-\[80\%\] {
-    width: 80%;
-  }
-
   .max-lg\:w-\[60\%\] {
     width: 60%;
-  }
-
-  .max-lg\:w-\[0\%\] {
-    width: 0%;
-  }
-
-  .max-lg\:w-\[70\%\] {
-    width: 70%;
   }
 }
 
 @media not all and (min-width: 768px) {
   .max-md\:w-\[100\%\] {
     width: 100%;
-  }
-
-  .max-md\:w-\[80\%\] {
-    width: 80%;
   }
 
   .max-md\:w-\[70\%\] {
@@ -989,19 +974,11 @@ video {
 }
 
 @media not all and (min-width: 640px) {
-  .max-sm\:w-\[90\%\] {
-    width: 90%;
+  .max-sm\:w-\[70\%\] {
+    width: 70%;
   }
 
   .max-sm\:w-\[95\%\] {
     width: 95%;
-  }
-
-  .max-sm\:w-\[50\%\] {
-    width: 50%;
-  }
-
-  .max-sm\:w-\[70\%\] {
-    width: 70%;
   }
 }

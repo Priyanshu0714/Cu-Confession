@@ -77,7 +77,7 @@ function CreatePostHandle(type) {
       break;
     case "PostMeme":
       postdiv.innerHTML =
-        '<div class="space-y-3"><input type="file" id="memeimg" name="image" required><input class="w-full rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="memecaption" id="memecaption" placeholder="Caption 😎" required></div>';
+        '<div class="space-y-3"><input type="file" id="memeimg" accept="image/*" name="image" required><input class="w-full rounded-md h-10 outline-[#262629] outline-offset-2 bg-black border-2 border-[#262629] py-1 px-2 text-gray-300" type="text" name="memecaption" id="memecaption" placeholder="Caption 😎" required></div>';
       break;
     default:
       console.log("Some error occurred!!");
@@ -125,8 +125,16 @@ async function handleFormSubmit(event) {
   else if(CreatepostLastClick.id==='PostMeme'){
     const imageinput=document.getElementById("memeimg").files[0]
     const imagecaption=document.getElementById("memecaption").value
+    const validTypes = [
+      "image/jpeg", "image/png", "image/gif", 
+      "image/webp", "image/svg+xml", "image/heic", 
+      "image/heif"
+  ];
 
-    if(!imageinput){
+    if(!imageinput&&!validTypes.includes(imageinput.type)){
+      document.getElementById("memeimg").value="";
+      document.getElementById("memecaption").value=""
+      document.getElementById("memecaption").placeholder="Not a vaild file type!"
       return;
     }
     await imageupload("Memecaption",{image:imageinput,imagecaption});
@@ -328,7 +336,9 @@ async function appendData(type,item){
         </div>
         <!-- meme upload area -->
         <div class="bg-black py-3 w-full h-auto flex items-center justify-center flex-col gap-2">
-            <img class="fill w-[50%] h-auto rounded-lg max-md:w-[100%]" src="${item.imageurl}"  alt="unable to load the image">
+        <div class="w-[50%] max-md:w-[100%] aspect-[16/9] overflow-hidden rounded-lg">
+          <img class="w-full h-full object-cover" src="${item.imageurl}" alt="unable to load the image">
+        </div>
             <div>${item.caption}</div>
         </div>
         <!-- for the comment area -->
@@ -477,3 +487,9 @@ document.getElementById("postconfessionsubmitbutton").addEventListener("click",(
     document.getElementById("All").click()},500
   )
 })
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-5HK0E3113C');
