@@ -198,13 +198,13 @@ app.post("/postrequest", async (req, res) => {
 
 // for likes updating
 // app.use("/updatelikes",likeupdate)
-app.post("/updatelikes",(req,res)=>{
-    const id=req.body.id;
-    const type=req.body.type
-    // console.log(type)
-    update(id,type)
-    return res.status(200).json({success:true})
-})
+// app.post("/updatelikes",(req,res)=>{
+//     const id=req.body.id;
+//     const type=req.body.type
+//     // console.log(type)
+//     update(id,type)
+//     return res.status(200).json({success:true})
+// })
 async function update(id,type){
     if(type=="PostConfession"){
         const update= await confession.findByIdAndUpdate(id,
