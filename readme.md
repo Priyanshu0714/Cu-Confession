@@ -4,7 +4,7 @@ CU Confession is a full-stack web application designed for students at Chandigar
 
 ## 📸 Preview
 
-![CU Confession Frontend](./path/to/screenshot.png)
+![CU Confession Frontend](public/images/frontend.png)
 
 ## 🛠️ Tech Stack
 
